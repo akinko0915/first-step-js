@@ -13,15 +13,22 @@ const result_element = document.createElement("p")
 
 function checkGuess(){
     guessCount++
+    // 数値変換をする
+    const userGuess = Number(guessField.value);
     guesses.innerHTML = "Guessing Count: " + guessCount;
-    lastResult.innerHTML = "Previous guesses: " + guessField.value;
+    lastResult.textContent = `Previous guesses: ${userGuess}`;
 
-    if (guessField.value == randomNumber){
+    if (userGuess == randomNumber){
         result_element.textContent = "Correct!";
+        // 背景色を追加
+        result_element.style.backgroundColor = "green"
         guessSubmit.disabled = true
     } else {
+        // 背景色を追加
+        result_element.style.backgroundColor = "red"
+
         if (guessCount != 10) {
-            if (guessField.value > randomNumber){
+            if (userGuess > randomNumber){
                 result_element.textContent = "Last guess was too high"
                 lowOrHi.appendChild(result_element);
             } else {
@@ -33,6 +40,9 @@ function checkGuess(){
             guessSubmit.disabled = true
         }
     }
+    //フィールドをリセット
+    guessField.value = ""
+    guessField.focus();
 }
 
 guessSubmit.addEventListener("click", checkGuess);
@@ -41,5 +51,7 @@ resetButton.addEventListener("click", function() {
     lastResult.innerHTML = null
     result_element.textContent = "";
     guessSubmit.disabled = false;
-    guessField.value = null
+    guessField.value = null;
+    // リセット時ランダム更新
+    randomNumber = Math.floor(Math.random() * 100) + 1;
 })
